@@ -55,10 +55,3 @@ function page() {
 
 export default page
 
-
-git init
-git add .
-git commit -m "Set up the strcuture of the project and finishe the UI" 
-git branch -M main
-git remote add origin https://github.com/maxphil058/next-js-message-dashboard.git
-git push -u origin main
