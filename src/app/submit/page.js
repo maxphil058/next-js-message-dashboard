@@ -1,6 +1,7 @@
 "use client"
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
 
 function page() {
 
@@ -11,25 +12,36 @@ function page() {
     router.push("/")
   }
 
-  const handleSubmit = async(e) => {
-    e.preventDefault()
-    const formData = new FormData(e.target);
-    const name = formData.get('name');
-    const message = formData.get('message');  
-    // Handle form submission logic here
-    console.log("Name:", name);
-    console.log("Message:", message);
-    console.log("Form submitted")
-    
-    await fetch('/api/messages', {
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const name = formData.get('name');
+  const message = formData.get('message');  
+  // Handle form submission logic here
+  console.log("Name:", name);
+  console.log("Message:", message);
+  console.log("Form submitted");
+
+  try {
+    const response = await fetch('/api/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ name, message }),
     });
-    // router.push('/')
+    
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    const data = await response.json();
+    console.log('Success:', data);
+  } catch (error) {
+    console.error('Error:', error);
   }
+  redirect('/'); // Redire
+};
   return (
     <form  onSubmit={handleSubmit} className=' gap-4 border-2 border-black flex  flex-col  justify-center space-around items-center bg-white m-10  p-10 rounded-lg shadow-lg  md:w-[90%] lg:max-w-[50%]'>
       <h1 className='font-300 text-4xl underline  '> Write a Message</h1>

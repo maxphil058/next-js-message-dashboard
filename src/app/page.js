@@ -1,28 +1,32 @@
 "use client"
 import { useRouter } from 'next/navigation'
 import './globals.css'
-import React, { use, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 
 function page() {
    const router = useRouter()
 
    const [data,setData] = useState([])
+   const [loading, setLoading] = useState(true)
 
    const handleClick = () => {  
     router.push('/submit')
   }
 
   const fetchMessages = async () => {
+    setLoading(true)
+    
     const data = await fetch('/api/messages')
     const json = await data.json()  
     setData(json)
+
+    setLoading(false)
   }
 
 
   useEffect(  ()=>{
   fetchMessages()
    
-
   } ,[]) 
 
 
@@ -32,12 +36,12 @@ function page() {
       <h1 className='font-300 text-4xl underline  '> Message Board</h1>
 
         <div className='flex flex-col space-y-4 mt-4'>
-
-          {data.map((message, index) => (
+          {loading ?(<div>Loading messages...</div>) :
+          (data?.map((message, index) => (
             <p key={index} className='border p-4 rounded-lg shadow-md'>
                 {message}
             </p>
-          ))}
+          ))) }
           
         </div>
       

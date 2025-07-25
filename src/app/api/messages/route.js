@@ -10,9 +10,11 @@ let messages = [
 
 export async function POST(request) {
     const body = await request.json();
-    const { name, message } = body; 
+    console.log(body)
+    const { message } = body; 
     messages.push(message);
-    redirect('/'); // Redirect to the home page after submission
+   return Response.json({ success: true, message: "Saved!" },
+      { status: 200 }) // Redirect to the home page after submission
 }
 
 export async function GET() {
